@@ -14,24 +14,24 @@ Preferences botSettings;
 int ADCLookup[16];
 
 int ADCLookupDefaults[16] = {
-    1384, // 0000
-    1523, // 0001
-    1672, // 0010
-    1821, // 0011
+    370, // 0000
+    535, // 0001
+    719, // 0010
+    805, // 0011
 
-    1960, // 0100
-    2068, // 0101
-    2148, // 0110
-    2336, // 0111
+    1040, // 0100
+    1259, // 0101
+    1479, // 0110
+    1714, // 0111
 
-    2559, // 1000
-    2708, // 1001
-    2863, // 1010
-    3023, // 1011
+    1950, // 1000
+    2172, // 1001
+    2309, // 1010
+    2502, // 1011
 
-    3191, // 1100
-    3382, // 1101
-    3597, // 1110
+    2774, // 1100
+    3007, // 1101
+    3269, // 1110
     4096, // 1111
 };
 
@@ -288,7 +288,7 @@ void sensorsDemo(TFT_eSPI *tft, Sensors_t *sensors)
             tft->drawNumber(*binaryPtrs[k], 290-270*(k%2), 130-50*(k/2));
         }
 
-        if (sensors->leftCm > 0) {
+        if (sensors->leftCm != OUT_OF_RANGE) {
             if (sensors->leftCm < shortRangeCm) tft->setTextColor(shortRangeColour, TFT_BLACK);
             else if (sensors->leftCm < mediumRangeCm) tft->setTextColor(mediumRangeColour, TFT_BLACK);
             else if (sensors->leftCm < longRangeCm) tft->setTextColor(longRangeColour, TFT_BLACK);
@@ -303,7 +303,7 @@ void sensorsDemo(TFT_eSPI *tft, Sensors_t *sensors)
 
         pollDistance(sensors);
 
-        if (sensors->rightCm > 0) {
+        if (sensors->rightCm != OUT_OF_RANGE) {
             if (sensors->rightCm < shortRangeCm) tft->setTextColor(shortRangeColour, TFT_BLACK);
             else if (sensors->rightCm < mediumRangeCm) tft->setTextColor(mediumRangeColour, TFT_BLACK);
             else if (sensors->rightCm < longRangeCm) tft->setTextColor(longRangeColour, TFT_BLACK);
