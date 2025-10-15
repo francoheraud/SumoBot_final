@@ -130,7 +130,7 @@ static void updateDisplay(int left, int right, int avg) {
   lastDisplayUpdate = now;
 
   tft.fillRect(0, 40, 240, 120, TFT_BLACK);
-  tft.setCursor(0, 40);
+  tft.setCursor(20, 40);
   tft.printf("Left : %4d cm\n", left);
   tft.printf("Right: %4d cm\n", right);
   tft.printf("Avg  : %4d cm\n", avg);
@@ -138,7 +138,7 @@ static void updateDisplay(int left, int right, int avg) {
     (currentState == STARTUP_ROTATE) ? "STARTUP" :
     (currentState == SEARCHING) ? "SEARCH" :
     (currentState == CHASING)  ? "CHASE" : "EDGE");
-  tft.printf("FL:%d FR:%d RL:%d RR:%d\n",
+  tft.printf("FL:%d FR:%d \n RL:%d RR:%d\n",
     sensor.frontLeft, sensor.frontRight, sensor.rearLeft, sensor.rearRight);
 }
 
