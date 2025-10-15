@@ -71,10 +71,13 @@ static void updateDistanceBuf(int distance) {
 static bool detectOpponent() {
   if (!bufferFilled) return false;
   int avg = getAverageDistance();
+
   int currIdx = (bufIdx - 1 + BUF_SIZE) % BUF_SIZE;
   int curr = distanceBuf[currIdx];
+
   bool dropDetected = (avg - curr) > DETECTION_THRESHOLD || curr < TRACK_OPPONENT_THRESHOLD;
   if (dropDetected) detectConfirmCount++;
+
   else detectConfirmCount = max(0, detectConfirmCount - 1);
   return (detectConfirmCount >= 2);
 }
@@ -138,14 +141,14 @@ static void updateDisplay(int left, int right, int avg) {
     (currentState == STARTUP_ROTATE) ? "STARTUP" :
     (currentState == SEARCHING) ? "SEARCH" :
     (currentState == CHASING)  ? "CHASE" : "EDGE");
-  tft.printf("FL:%d FR:%d \n RL:%d RR:%d\n",
+  tft.printf("FL:%d FR:%d \n RL:%d RR:%d",
     sensor.frontLeft, sensor.frontRight, sensor.rearLeft, sensor.rearRight);
 }
 
 void loop() {
   pollDistance(&sensor);
-  delay(5);
-  pollDistance(&sensor);
+  //delay(5);
+  //pollDistance(&sensor);
   detectLine(&sensor);
 
   int left = normaliseDistanceForBuffer(sensor.leftCm);

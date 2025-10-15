@@ -52,49 +52,47 @@ void initMotors(void) {
 }
 
 
-// according to my testing: I screwed up the polarity of the motor connections,
-// 
 void move(Motor_t *motor) {
     switch (motor->direction) {
         case FORWARD:
-            digitalWrite(IN1A, HIGH); digitalWrite(IN2A, LOW);
-            digitalWrite(IN1B, HIGH); digitalWrite(IN2B, LOW);
-            // temporary
-            motor->desiredSpeedA = maxTickSpeed * 0.5f;
+            digitalWrite(IN1A, HIGH);   digitalWrite(IN2A, LOW);
+            digitalWrite(IN1B, HIGH);   digitalWrite(IN2B, LOW);
+
+            motor->desiredSpeedA = maxTickSpeed * 0.5f; // half speed is temporary...
             motor->desiredSpeedB = maxTickSpeed * 0.5f;
             break;
 
         case REVERSE:
-            digitalWrite(IN1A, LOW); digitalWrite(IN2A, HIGH);
-            digitalWrite(IN1B, LOW); digitalWrite(IN2B, HIGH);
+            digitalWrite(IN1A, LOW);    digitalWrite(IN2A, HIGH);
+            digitalWrite(IN1B, LOW);    digitalWrite(IN2B, HIGH);
             motor->desiredSpeedA = maxTickSpeed * 0.5f;
             motor->desiredSpeedB = maxTickSpeed * 0.5f;
             break;
 
         case RIGHT:
-            digitalWrite(IN1A, HIGH); digitalWrite(IN2A, LOW);
-            digitalWrite(IN1B, LOW);  digitalWrite(IN2B, LOW);
+            digitalWrite(IN1A, LOW);    digitalWrite(IN2A, LOW);
+            digitalWrite(IN1B, HIGH);   digitalWrite(IN2B, LOW);
             motor->desiredSpeedA = maxTickSpeed;
             motor->desiredSpeedB = 0.0f;
             break;
 
         case LEFT:
-            digitalWrite(IN1A, LOW);  digitalWrite(IN2A, LOW);
-            digitalWrite(IN1B, HIGH); digitalWrite(IN2B, LOW);
+            digitalWrite(IN1A, HIGH);   digitalWrite(IN2A, LOW);
+            digitalWrite(IN1B, LOW);    digitalWrite(IN2B, LOW);
             motor->desiredSpeedA = 0.0f;
             motor->desiredSpeedB = maxTickSpeed;
             break;
 
         case ROTATE_CW:
-            digitalWrite(IN1A, HIGH); digitalWrite(IN2A, LOW);
-            digitalWrite(IN1B, LOW);  digitalWrite(IN2B, HIGH);
+            digitalWrite(IN1A, LOW);    digitalWrite(IN2A, HIGH);
+            digitalWrite(IN1B, HIGH);   digitalWrite(IN2B, LOW);
             motor->desiredSpeedA = maxTickSpeed * 0.5f;
             motor->desiredSpeedB = maxTickSpeed * 0.5f;
             break;
 
         case ROTATE_CCW:
-            digitalWrite(IN1A, LOW);  digitalWrite(IN2A, HIGH);
-            digitalWrite(IN1B, HIGH); digitalWrite(IN2B, LOW);
+            digitalWrite(IN1A, HIGH);   digitalWrite(IN2A, LOW);
+            digitalWrite(IN1B, LOW);    digitalWrite(IN2B, HIGH);
             motor->desiredSpeedA = maxTickSpeed * 0.5f;
             motor->desiredSpeedB = maxTickSpeed * 0.5f;
             break;
