@@ -9,7 +9,7 @@
 #define LEFT_ECHO				17
 #define RIGHT_TRIGGER			43
 #define RIGHT_ECHO				44
-#define LINEDETECTOR_DAC		16
+#define LINEDETECTOR_DAC		13
 
 #define LEFT_ULTRASONIC 	0
 #define RIGHT_ULTRASONIC 	1
