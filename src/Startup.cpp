@@ -6,12 +6,11 @@
 #include "Motor.h"
 
 char robotModeDescriptions[6][BUFFER_CHARS] = {
-  "0. SENSORS DEMO",
-  "1. MOTORS DEMO",
-  "2. START COMPETITION",
-  "3. PRINT ADC LOOKUP TABLE",
-  "4. CALIBRATE LINE DETECTOR ADC",
-  "5. RESET ALL SETTINGS",
+  "0. START COMPETITION",
+  "1. SENSORS DEMO",
+  "2. PRINT ADC LOOKUP TABLE",
+  "3. CALIBRATE LINE DETECTOR ADC",
+  "4. RESET ALL SETTINGS",
 };
 
 menuOption currentMenu;
@@ -36,7 +35,7 @@ void userSelectFunction(TFT_eSPI *tft, Sensors_t *s, Motor_t *mot)
       tft->setTextFont(0);
       startOperation = true;
     } else if (prevRight && !currRight) {
-      currChoice = (currChoice + 1) % 6; // Must update this whenever we add/remove robotModes
+      currChoice = (currChoice + 1) % 5; // Must update this whenever we add/remove robotModes
       lastUpdateTime = millis();
     }
 
@@ -71,8 +70,6 @@ void userSelectFunction(TFT_eSPI *tft, Sensors_t *s, Motor_t *mot)
       resetADCLookup(tft);
       userSelectFunction(tft, s, mot);
       break;
-    case (MOTORS):
-      break;
     case (SENSORS):
       sensorsDemo(tft, s);
       break;
@@ -98,7 +95,8 @@ void competitionCountdownTimer(TFT_eSPI *tft, int seconds)
   }
   tft->drawString("GO", 170, 85);
   delay(500);
-  tft->setTextSize(3);
+  tft->setTextSize(1);
+  tft->setTextFont(0);
   tft->setTextDatum(TL_DATUM);
   tft->fillScreen(TFT_BLACK);
 }
