@@ -19,6 +19,7 @@ bool bufferFilled = false;
 
 enum RobotState { STARTUP_ROTATE, SEARCHING, CHASING, AVOID_EDGE };
 RobotState currentState = STARTUP_ROTATE;
+RobotState prevState = CHASING;
 
 Direction lastSeenDirection = ROTATE_CCW;
 unsigned long lastPIUpdate = 0;
@@ -43,8 +44,6 @@ void setup() {
   tft.setTextSize(2);
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
-  tft.println("SUMO BOT READY!");
-  tft.println("------------------");
 
   for (int i = 0; i < BUF_SIZE; ++i) distanceBuf[i] = 1000;
   bufIdx = 0;
@@ -103,7 +102,7 @@ static void updateMotorControl() {
 }
 
 static void chaseMode() {
-  bool haveBoth = (sensor.leftCm > 0 && sensor.rightCm > 0);
+  bool haveBoth = (sensor.leftCm != OUT_OF_RANGE && sensor.rightCm != OUT_OF_RANGE);
   bool opponentLeft = haveBoth && (sensor.leftCm < sensor.rightCm - TRACK_OPPONENT_THRESHOLD);
   bool opponentRight = haveBoth && (sensor.rightCm < sensor.leftCm - TRACK_OPPONENT_THRESHOLD);
 
@@ -136,16 +135,37 @@ static void updateDisplay(int left, int right, int avg) {
   unsigned long now = millis();
   if (now - lastDisplayUpdate < 100) return;
   lastDisplayUpdate = now;
+  static int statusColor = TFT_BLACK;
 
-  tft.setCursor(0, 40);
+  switch (currentState) {
+    case STARTUP_ROTATE:
+      statusColor = TFT_CYAN;
+      break;
+    case SEARCHING:
+      statusColor = TFT_YELLOW;
+      break;
+    case CHASING:
+      statusColor = TFT_GREEN;
+      break;
+    case AVOID_EDGE:
+    default:
+      statusColor = TFT_RED;
+      break;
+  }
+  if (currentState != prevState) {
+    tft.fillScreen(statusColor);
+    tft.setTextColor(TFT_BLACK, statusColor);
+  }
+
+  tft.setCursor(0, 0);
   tft.printf("Left :%4d cm\n", left);
   tft.printf("Right:%4d cm\n", right);
   tft.printf("Avg  :%4d cm\n", avg);
-  tft.printf("State: %s\n",
+  tft.printf("State: %8s\n",
     (currentState == STARTUP_ROTATE) ? "STARTUP" :
     (currentState == SEARCHING) ? "SEARCH" :
     (currentState == CHASING)  ? "CHASE" : "EDGE");
-  tft.printf("FL:%d FR:%d \nRL:%d RR:%d\n%d",
+  tft.printf("FL:%d FR:%d \nRL:%d RR:%d\n%4d",
     sensor.frontLeft, sensor.frontRight, sensor.rearLeft, sensor.rearRight, sensor.analogReading);
 }
 
@@ -207,4 +227,5 @@ void loop() {
 
   updateMotorControl();
   updateDisplay(sensor.leftCm, sensor.rightCm, avg);
+  prevState = currentState;
 }
