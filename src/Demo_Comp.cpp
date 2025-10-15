@@ -29,16 +29,18 @@ static int detectConfirmCount = 0;
 void setup() {
   pinMode(LEFT_BUTTON, INPUT);
   pinMode(RIGHT_BUTTON, INPUT);
-  pinMode(15,HIGH);
+  pinMode(15,OUTPUT);
   digitalWrite(15,HIGH);
 
   initMotors();
   initSensors();
 
   tft.init();
+  tft.setRotation(3);
   tft.fillScreen(TFT_BLACK);
+  userSelectFunction(&tft, &sensor, &motor);
+
   tft.setTextSize(2);
-  tft.setRotation(0);
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.println("SUMO BOT READY!");
@@ -135,8 +137,7 @@ static void updateDisplay(int left, int right, int avg) {
   if (now - lastDisplayUpdate < 100) return;
   lastDisplayUpdate = now;
 
-  tft.fillRect(0, 40, 240, 120, TFT_BLACK);
-  tft.setCursor(20, 40);
+  tft.setCursor(0, 40);
   tft.printf("Left :%4d cm\n", left);
   tft.printf("Right:%4d cm\n", right);
   tft.printf("Avg  :%4d cm\n", avg);
@@ -144,11 +145,13 @@ static void updateDisplay(int left, int right, int avg) {
     (currentState == STARTUP_ROTATE) ? "STARTUP" :
     (currentState == SEARCHING) ? "SEARCH" :
     (currentState == CHASING)  ? "CHASE" : "EDGE");
-  tft.printf("FL:%d FR:%d \n RL:%d RR:%d",
-    sensor.frontLeft, sensor.frontRight, sensor.rearLeft, sensor.rearRight);
+  tft.printf("FL:%d FR:%d \nRL:%d RR:%d\n%d",
+    sensor.frontLeft, sensor.frontRight, sensor.rearLeft, sensor.rearRight, sensor.analogReading);
 }
 
 void loop() {
+  pollDistance(&sensor);
+  delay(5);
   pollDistance(&sensor);
   detectLine(&sensor);
 
