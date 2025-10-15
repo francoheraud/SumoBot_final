@@ -39,6 +39,7 @@ void initMotors(void) {
     pinMode(IN2B, OUTPUT);
     
     pinMode(PWMA, OUTPUT);
+    pinMode(PWMB, OUTPUT);
 
     ledcSetup(PWM_CHANNEL_A, PWM_FREQ, PWM_RESOLUTION);
     ledcSetup(PWM_CHANNEL_B, PWM_FREQ, PWM_RESOLUTION);
